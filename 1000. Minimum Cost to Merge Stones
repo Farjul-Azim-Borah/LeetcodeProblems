@@ -1,0 +1,45 @@
+class Solution {
+public:
+    int pre[40];
+    int k1;
+    vector<int> st;
+    long long dp[32][32];
+    long long solve(int i , int j){
+        if(i>=j){
+            return 0;
+        }
+        
+        if(dp[i][j] != -1){
+            return dp[i][j];
+        }
+
+        long long ans = INT_MAX;
+        long long res = 0;
+        if((j-i)%(k1-1) == 0){
+            res += pre[j]-pre[i]+st[i];
+        }
+
+        for(int k = i; k<j; k+=k1-1){ 
+            ans = min(ans ,res +  solve(i,k) + solve(k+1,j));
+        }
+        return dp[i][j] = ans;
+    }
+
+
+    int mergeStones(vector<int>& stones, int k) {
+        int n = stones.size();
+
+        if((n-1)%(k-1) != 0){
+            return -1;
+        }
+
+        pre[0] = stones[0];
+        k1 = k;
+        st = stones;
+        memset(dp , -1 , sizeof(dp));
+        for(int i = 1; i<n; ++i){
+            pre[i] = pre[i-1] + stones[i];
+        }
+        return solve(0 , n-1);
+    }
+};
