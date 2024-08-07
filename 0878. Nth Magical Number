@@ -1,0 +1,29 @@
+class Solution {
+public:
+    long long mod = 1e9+7;
+    long long lcm(long long a , long long b){
+        return (1ll*a*b)/(__gcd(a,b));
+    }
+
+    bool ischeck(long long mid , long long a , long long b , long long n){
+        long long res1 = mid/a;
+        long long res2 = mid/b;
+        long long k = res1 + res2 - mid/lcm(a,b);
+        return n<=k;
+    }
+    
+    int nthMagicalNumber(int n, int a, int b) {
+        long long lo = 0 , hi = 1e18;
+        long long ans = 0;
+        while(hi>=lo){
+            long long mid = (hi+lo)/2;
+            if(ischeck(mid,a,b,n) == true){
+                ans = mid;
+                hi = mid-1;
+            }else{
+                lo = mid+1;
+            }
+        }
+        return ans%mod;
+    }
+};
